@@ -1,0 +1,4 @@
+data/
+model_state/
+__pycache__/
+main.ipynb
