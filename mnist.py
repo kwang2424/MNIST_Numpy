@@ -1,11 +1,12 @@
 import numpy as np
+import config
 
 class NN:
-    def __init__(self, input_size, hidden_size, output_size, lr):
+    def __init__(self, input_size, hidden_size, output_size, lr, batch_size):
         self.weights1 = np.random.randn(input_size, hidden_size) * 0.01
         self.weights2 = np.random.randn(hidden_size, output_size) * 0.01
-        self.bias1 = np.zeros((1, hidden_size))
-        self.bias2 = np.zeros((1, output_size))
+        self.bias1 = np.zeros((batch_size, hidden_size))
+        self.bias2 = np.zeros((batch_size, output_size))
         self.lr = lr
 
     def relu(self, x):
@@ -15,8 +16,8 @@ class NN:
         return (x > 0).astype(float)
     
     def softmax(self, x):
-        e_x = np.exp(x - np.max(x))
-        return e_x / np.sum(e_x)
+        e_x = np.exp(x - np.max(x, axis=1, keepdims=True))
+        return e_x / np.sum(e_x, axis=1, keepdims=True)
     
     def forward(self, X):
         # want (b x i) * (i x h) = (b x h)
